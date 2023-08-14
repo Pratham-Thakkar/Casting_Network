@@ -5,7 +5,6 @@ const { v4: uuidv4 } = require("uuid");
 const UnionSchema = new Schema({
   id: {
     type: String,
-    required: true,
     unique: true,
   },
   unionName: {

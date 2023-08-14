@@ -5,7 +5,6 @@ const { v4: uuidv4 } = require("uuid");
 const EthnicitySchema = new Schema({
   id: {
     type: String,
-    required: true,
     unique: true,
   },
   ethnicityType: {

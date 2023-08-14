@@ -5,7 +5,6 @@ const { v4: uuidv4 } = require("uuid");
 const GenderSchema = new Schema({
   id: {
     type: String,
-    required: true,
     unique: true,
   },
   genderType: {
