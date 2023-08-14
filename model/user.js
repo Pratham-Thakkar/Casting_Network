@@ -61,6 +61,10 @@ const UserSchema = new Schema(
       enum: ["Active", "Inactive", "Blocked"],
       default: "Active",
     },
+    acceptTermsAndConditions: {
+      type: Boolean,
+      default: true,
+    },
     allowNotifications: {
       type: Boolean,
       default: true,

@@ -18,7 +18,7 @@ const LocationEntitySchema = new Schema({
   },
   enitityType: {
     type: String,
-    enum: ["audition", "work"],
+    enum: ["audition", "work", "project", "role"],
   },
 });
 
