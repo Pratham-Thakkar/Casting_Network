@@ -16,7 +16,7 @@ const SkillEntitySchema = new Schema({
     type: String,
     required: true,
   },
-  enitityType: {
+  entityType: {
     type: String,
     required: true,
     enum: ["User", "Role"],

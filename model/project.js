@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const { v4: uuidv4 } = require("uuid");
 
 const ProjectSchema = new Schema(
   {
@@ -10,9 +9,8 @@ const ProjectSchema = new Schema(
       unique: true,
     },
     createdBy: {
-      type: Schema.Types.ObjectId,
+      type: String,
       required: true,
-      ref: "User",
     },
     projectName: {
       type: String,
@@ -20,14 +18,12 @@ const ProjectSchema = new Schema(
     },
     internalProjectName: String,
     projectType: {
-      type: Schema.Types.ObjectId,
+      type: String,
       required: true,
-      ref: "ProjectType",
     },
     union: {
-      type: Schema.Types.ObjectId,
+      type: String,
       required: true,
-      ref: "Union",
     },
     projectDescription: String,
     showContactInfo: {
@@ -64,6 +60,16 @@ const ProjectSchema = new Schema(
     castingAssistantCreativeTeam: String,
     contactPhoneNumberCreativeTeam: String,
     contactEmailCreativeTeam: String,
+    showAuditionLocationToTalent: {
+      type: Boolean,
+      default: false,
+    },
+    auditionDateInRange: Boolean,
+    showWorkLocation: {
+      type: Boolean,
+      default: false,
+    },
+    workDateInRange: Boolean,
     projectSynopsis: String,
     projectAdditionalDetails: String,
     additionalFileLink: [String],
@@ -80,9 +86,5 @@ const ProjectSchema = new Schema(
     timestamps: true,
   }
 );
-
-ProjectSchema.pre("save", function () {
-  this.projectId = uuidv4();
-});
 
 module.exports = mongoose.model("Project", ProjectSchema);
