@@ -195,3 +195,5 @@ exports.listProject = async (req, res) => {
     res.status(500).send({ status: "failed", message: e.message });
   }
 };
+
+exports.updateProject = async (req, res) => {};
