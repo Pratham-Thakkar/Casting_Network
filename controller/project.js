@@ -202,4 +202,67 @@ exports.listProject = async (req, res) => {
   }
 };
 
-exports.updateProject = async (req, res) => {};
+exports.updateProject = async (req, res) => {
+  try {
+    const {
+      params: { projectId },
+    } = req;
+    const {
+      body: { projectName },
+    } = req;
+    if (!projectId) throw Error("Project Id is necessary");
+    const project = await Project.findOne({ projectId });
+    if (!project) throw Error("This project does not exist");
+    if (project.createdBy !== req.userId)
+      throw Error("You can only update your project");
+    await project.updateOne({ projectName });
+    res.send({ status: "success", message: "project updated" });
+  } catch (e) {
+    res.status(500).send({ status: "failed", message: e.message });
+  }
+};
+
+exports.deleteProject = async (req, res) => {
+  try {
+    const {
+      params: { projectId },
+    } = req;
+    if (!projectId) throw Error("Project Id is necessary");
+    const project = await Project.findOne({ projectId });
+    if (!project) throw Error("This project does not exist");
+    if (project.createdBy !== req.userId)
+      throw Error("You can only delete your project");
+    await project.deleteOne({ projectId });
+    res.send({ status: "success", message: "project deleted" });
+  } catch (e) {
+    res.status(500).send({ status: "failed", message: e.message });
+  }
+};
+
+exports.duplicateProject = async (req, res) => {
+  try {
+    const {
+      params: { projectId },
+    } = req;
+    if (!projectId) throw Error("Project Id is necessary");
+    const project = await Project.findOne({ projectId });
+    if (!project) throw Error("This project does not exist");
+    if (project.createdBy !== req.userId)
+      throw Error("You can only duplicate project created by you");
+    const details = { ...project };
+    delete details._doc._id,
+      delete details._doc.__v,
+      delete details._doc.createdAt,
+      delete details._doc.updatedAt;
+    const newProject = new Project(details._doc);
+    newProject.projectId = uuidv4();
+    await newProject.save();
+    res.send({
+      status: "success",
+      message: "project duplicatted",
+      data: newProject,
+    });
+  } catch (e) {
+    res.status(500).send({ status: "failed", message: e.message });
+  }
+};
