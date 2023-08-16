@@ -135,7 +135,13 @@ exports.listProject = async (req, res) => {
       body: { userId },
     } = req;
     if (!userId) throw Error("User id is not given");
+    if (req.userId !== userId) throw Error("You can only view your projects");
     const projects = await Project.aggregate([
+      {
+        $match: {
+          createdBy: userId,
+        },
+      },
       {
         $lookup: {
           from: "users",

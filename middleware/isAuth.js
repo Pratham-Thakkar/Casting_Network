@@ -14,6 +14,7 @@ exports.isAuth = async (req, res, next) => {
     //   throw Error("You status is not active, contact support team");
 
     req.userType = payload.data.userType;
+    req.userId = payload.data.userId;
     next();
   } catch (e) {
     res.status(500).send({ status: "failed", message: e.message });

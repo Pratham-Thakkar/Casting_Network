@@ -76,6 +76,7 @@ exports.login = async (req, res) => {
       {
         exp: Math.floor(Date.now() / 1000) + 60 * 60,
         data: {
+          userId: user.userId,
           userType: user.userType,
           verify: user.verified,
           status: user.status,
