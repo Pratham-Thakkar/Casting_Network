@@ -129,4 +129,69 @@ exports.addProject = async (req, res) => {
   }
 };
 
-exports.listProject = async (req, res) => {};
+exports.listProject = async (req, res) => {
+  try {
+    const {
+      body: { userId },
+    } = req;
+    if (!userId) throw Error("User id is not given");
+    const projects = await Project.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "createdBy",
+          foreignField: "userId",
+          as: "creatordetails",
+          pipeline: [
+            {
+              $project: {
+                _id: 0,
+                firstName: 1,
+                email: 1,
+              },
+            },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: "locationentities",
+          localField: "projectId",
+          foreignField: "entityId",
+          pipeline: [
+            {
+              $project: {
+                _id: 0,
+                entityType: 1,
+                locationId: 1,
+                creatordetails: 1,
+              },
+            },
+            {
+              $lookup: {
+                from: "locations",
+                localField: "locationId",
+                foreignField: "id",
+                pipeline: [
+                  {
+                    $project: {
+                      _id: 0,
+                      id: 0,
+                      __v: 0,
+                    },
+                  },
+                ],
+                as: "locationName",
+              },
+            },
+          ],
+          as: "locations",
+        },
+      },
+    ]);
+    if (!projects) throw Error("No project is created by this user");
+    res.send({ status: "success", data: projects });
+  } catch (e) {
+    res.status(500).send({ status: "failed", message: e.message });
+  }
+};
