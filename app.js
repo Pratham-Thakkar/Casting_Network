@@ -6,6 +6,7 @@ require("dotenv").config();
 const userRoutes = require("./route/users");
 const cdRoutes = require("./route/cd");
 const adminRoutes = require("./route/admin");
+const { addUsers, sendNotification } = require("./utils/cronJob");
 
 const app = express();
 
@@ -20,6 +21,8 @@ mongoose
   .then(() => {
     console.log("Database connected");
     app.listen(process.env.PORT);
+    addUsers.start();
+    sendNotification.start();
   })
   .catch((err) => {
     console.log(err);

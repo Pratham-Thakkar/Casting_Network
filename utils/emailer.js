@@ -32,3 +32,17 @@ exports.sendWelcomeEmail = async (email, firstName) => {
     return false;
   }
 };
+
+exports.sendNotificationEmail = async (email) => {
+  const msg = {
+    to: email,
+    from: FROM_EMAIL,
+    subject: "Notification email",
+    html: `<strong>Hello</strong>, This is a notification email.`,
+  };
+  try {
+    await sgMail.send(msg);
+  } catch (e) {
+    return false;
+  }
+};

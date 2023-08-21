@@ -1,5 +1,5 @@
-const Location = require("../model/lookup/location");
 const { v4: uuidv4 } = require("uuid");
+const Location = require("../model/lookup/location");
 
 exports.fetchLocation = async (
   projectId,
